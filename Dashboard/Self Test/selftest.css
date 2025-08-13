@@ -1,0 +1,79 @@
+/* Button Shine Effect - Blue Version */
+.shine-btn {
+  position: relative;
+  overflow: hidden;
+  background-color: #5997fa;
+  color: rgb(250, 217, 217);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.shine-btn:hover {
+  background-color: #1656df;
+  transform: scale(1.03);
+}
+
+.shine-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(173, 216, 255, 0.5),
+    rgba(59, 130, 246, 0)
+  );
+  transform: skewX(-20deg);
+}
+
+.shine-btn:hover::before {
+  animation: shine 0.75s forwards;
+}
+
+@keyframes shine {
+  100% { left: 125%; }
+}
+
+/* Top bar animation */
+.top-bar {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.6s ease, opacity 0.6s ease;
+  background-color: white;
+  opacity: 80%;
+  color: #1656df;
+}
+
+.top-bar.show {
+  transform: translateY(0);
+  opacity: 80%;
+}
+
+/* Page background */
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(90deg, #003080, #0047b3, #3366ff);
+  color: white;
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* White card for each section */
+.form-section {
+  background-color: white;
+  opacity: 80%;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  color: black;
+  margin-bottom: 1rem;
+}
+
+/* Narrower text area and input fields */
+input.form-input, textarea.form-input, select.form-select {
+  max-width: 80%;
+}
