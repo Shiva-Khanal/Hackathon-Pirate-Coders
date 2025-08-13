@@ -1,4 +1,4 @@
-/* Background */
+/* ===== Background ===== */
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -7,32 +7,45 @@ body {
     position: relative;
     min-height: 100vh;
     overflow-x: hidden;
+    padding-top: 80px; /* space for fixed navbar */
 }
 
-/* Nav bar */
-.topbar {   
-    margin: 0 auto;          
-    padding: 0px 40px;   
-    background-color: rgb(239, 246, 255);
-    color: #111;            
+/* ===== Top Bar ===== */
+.topbar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    z-index: 2;
+    padding: 0px 20px;
+    background-color: rgb(239, 246, 255);
+    color: #111;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
 }
 
-/* Nav links */
+.topbar-left {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
 .nav-links {
     display: flex;
-    gap: 40px;
+    justify-content: center;
+    gap: 20px;
+    flex: 1;
+    flex-wrap: wrap;
+    min-width: 200px;
 }
 
 .nav-links a {
-    color: #1a1a1a;             
     text-decoration: none;
-    font-size: 0.95rem;
-    font-weight: 500;
+    color: #111;
+    font-weight: 600;
     transition: color 0.3s ease;
 }
 
@@ -40,27 +53,38 @@ body {
     color: #666666;
 }
 
-/* Profile button */
 .topbar-right {
-    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-left: 10px;
 }
 
 .profile {
     cursor: pointer;
+    font-weight: 600;
+    padding: 8px 22px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    transition: background 0.3s ease;
 }
 
-/* Logo */
+.profile:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== Logo ===== */
 .topbar-left img {
     height: 60px;
     margin-right: 12px;
-    border-radius: 70%;  
-    object-fit: cover;   
+    border-radius: 70%;
+    object-fit: cover;
 }
 
-/* Main content grid */
+/* ===== Main Content Grid ===== */
 .main-content {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Left = text, Right = image */
+    grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 40px;
     max-width: 1200px;
@@ -68,7 +92,7 @@ body {
     padding: 20px;
 }
 
-/* Left column text */
+/* ===== Left Column Text ===== */
 .main-text h1 {
     font-family: 'Quicksand', sans-serif;
     font-size: 3rem;
@@ -77,7 +101,6 @@ body {
     line-height: 1.1;
 }
 
-/* Make only the first heading (STUDY QUEST) bigger and bolder */
 .main-text h1:first-of-type {
     font-size: 4rem;
     font-weight: 900;
@@ -92,14 +115,15 @@ body {
     margin-bottom: 20px;
 }
 
+/* ===== Get Started Button ===== */
 .get-started-btn {
     position: relative;
     padding: 12px 28px;
     font-size: 1rem;
     font-weight: bold;
     color: white;
-    background: linear-gradient(90deg, #1e3c72, #2a5298); /* Blue gradient */
-    border: 2px solid gold; /* Golden border */
+    background: linear-gradient(90deg, #1e3c72, #2a5298);
+    border: 2px solid gold;
     border-radius: 30px;
     cursor: pointer;
     overflow: hidden;
@@ -110,7 +134,7 @@ body {
 
 .get-started-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 15px gold; /* Glow effect */
+    box-shadow: 0 0 15px gold;
 }
 
 /* Shine effect */
@@ -134,14 +158,88 @@ body {
     100% { left: 125%; }
 }
 
-/* Right column image */
+/* ===== Right Column Image ===== */
 .main-image img {
     width: 100%;
     height: auto;
     border-radius: 10px;
 }
 
-/* Responsive layout for small screens */
+/* ===== Scroll Down Button ===== */
+.scroll-down {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9;
+}
+
+.scroll-down a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: border-color 0.3s ease, transform 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.scroll-down a:hover {
+    border-color: gold;
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.scroll-down a svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    animation: arrowMove 1.5s infinite ease-in-out;
+}
+
+.scroll-down a:hover svg {
+    stroke: gold;
+}
+
+/* Smooth arrow animation */
+@keyframes arrowMove {
+    0%, 100% {
+        transform: translateY(0);
+        opacity: 0.7;
+    }
+    50% {
+        transform: translateY(6px);
+        opacity: 1;
+    }
+}
+
+/* ===== Footer ===== */
+footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: rgba(0,0,0,0.3);
+    padding: 40px;
+    margin-top: 80px;
+    gap: 40px;
+}
+
+.footer-left h2, .footer-right h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+    color: rgb(255, 255, 255);
+}
+
+.footer-left p, .footer-right p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
     .main-content {
         grid-template-columns: 1fr;
@@ -152,5 +250,9 @@ body {
     }
     .main-image {
         margin-top: 20px;
+    }
+    footer {
+        grid-template-columns: 1fr;
+        text-align: center;
     }
 }
