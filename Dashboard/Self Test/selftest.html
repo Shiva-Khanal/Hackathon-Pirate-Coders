@@ -12,7 +12,7 @@
     <h1 class="text-4xl font-bold">Create Your Own Test</h1>
   </div>
 
-  <div class="max-w-4xl mx-auto py-5">
+  <div class="max-w-4xl mx-auto py-5" id="createSection">
     
     <!-- Test Name -->
     <div class="form-section">
@@ -66,22 +66,22 @@
     <div class="form-section">
       <h2 class="text-2xl font-bold mb-4">Take a Saved Test</h2>
       <select id="testSelect" class="form-select border-gray-300 rounded-lg p-2 mb-4"></select>
-      <div id="takeTestArea"></div>
     </div>
   </div>
 
+  <!-- Test Display Section -->
+  <div id="takeTestSection" class="max-w-4xl mx-auto py-5 hidden">
+    <div id="takeTestArea"></div>
+  </div>
 
 <script>
   let selectedSubjects = [];
 
- document.querySelectorAll('.subject-btn').forEach(btn => {
-  btn.addEventListener('change', () => {
-    if (btn.checked) {
-      selectedSubjects.push(btn.value);
-    }
+  document.querySelectorAll('.subject-btn').forEach(btn => {
+    btn.addEventListener('change', () => {
+      if (btn.checked) selectedSubjects.push(btn.value);
+    });
   });
-});
-
 
   // Generate question fields
   document.getElementById('generateQuestions').addEventListener('click', () => {
@@ -142,8 +142,18 @@
     const index = this.value;
     const tests = JSON.parse(localStorage.getItem('tests') || '[]');
     const takeArea = document.getElementById('takeTestArea');
+    const takeSection = document.getElementById('takeTestSection');
     takeArea.innerHTML = '';
-    if (index === "") return;
+
+    if (index === "") {
+      takeSection.classList.add('hidden');
+      return;
+    }
+
+    // Clear create test form section
+    document.getElementById('createSection').innerHTML = "";
+
+    // Show test questions
     const test = tests[index];
     test.questions.forEach((q, i) => {
       takeArea.innerHTML += `
@@ -155,27 +165,23 @@
     });
     takeArea.innerHTML += `<button id="submitTest" class="shine-btn bg-green-500 text-white px-4 py-2 rounded font-bold">Submit Answers</button>`;
     
+    // Show section and scroll
+    takeSection.classList.remove('hidden');
+    takeSection.scrollIntoView({ behavior: 'smooth' });
+
+    // Submit answers check
     document.getElementById('submitTest').addEventListener('click', () => {
       document.querySelectorAll('.user-answer').forEach(input => {
         const correct = input.dataset.ans.trim().toLowerCase();
         const user = input.value.trim().toLowerCase();
-        if (user === correct) {
-          input.classList.remove('border-red-500');
-          input.classList.add('border-green-500');
-        } else {
-          input.classList.remove('border-green-500');
-          input.classList.add('border-red-500');
-        }
+        input.classList.toggle('border-green-500', user === correct);
+        input.classList.toggle('border-red-500', user !== correct);
       });
     });
   });
 
   // Init
   loadTestSelect();
-  window.addEventListener('DOMContentLoaded', () => {
-  document.querySelector('.top-bar').classList.add('show');
-});
-
 </script>
 </body>
 </html>
