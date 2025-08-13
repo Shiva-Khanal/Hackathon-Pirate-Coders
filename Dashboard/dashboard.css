@@ -1,86 +1,130 @@
-/* General body setup */
+/*Background*/
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #003080, #0047b3, #3366ff);
+    color: white;
+    position: relative;
     min-height: 100vh;
-    background: linear-gradient(90deg, #d0a1f7 0%, #9fd1f1 100%);
+    overflow-x: hidden;
 }
 
-/* Top bar */
-.topbar {
+/* BACKGROUND PAXADI KO IMAGE */
+.background-center {
+    position: fixed; 
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none; 
+    z-index: 0;
+    max-width: 400px; 
+    width: 50vw; 
+    opacity: 0.8; 
+}
+
+/* Nav bar  */
+.topbar {   
+    margin: 0 auto;          
+    padding: 12px 60px;   
+    background: rgba(255, 255, 255, 0.85); 
+    opacity: 1;
+    color: #111;            
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    background-color: #20179c;
-    padding: 10px 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    position: relative;
+    z-index: 2;
 }
 
-.topbar-left {
+/* Nav ma vako links*/
+.nav-links {
     display: flex;
-    align-items: center;
-    gap: 12px;
+    gap: 40px;
 }
 
+.nav-links a {
+    color:  #1a1a1a;             
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+/*links ma hover garda change hune color */
+.nav-links a:hover {
+  color: #666666;
+}
+
+
+/* Main Content */
+.content {
+    max-width: 700px;
+    margin: 80px auto 50px auto; 
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+    z-index: 2; 
+}
+
+
+/* Profile wala button */
+.topbar-right {
+    color: rgb(0, 0, 0);
+}
+
+.profile {
+    cursor: pointer;
+}
+
+.content img.background-small {
+    display: block;
+    margin: 0 auto 30px auto;
+    width: 150px;  
+    height: auto;
+}
+
+/* logo ko size and stuff*/
 .topbar-left img {
-    height: 70px;
-    width: 70px;
-    object-fit: contain;
+    height: 42px;
+    margin-right: 10px;
+    border-radius: 70%;  
+    object-fit: cover;   
 }
 
 .topbar-left h1 {
-    font-size: 30px;
     margin: 0;
-    color: #0b75ff;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-.topbar-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.topbar-right span {
-    font-size: 14px;
-    color: #45b0be;
-}
-
-/* Main content centered */
-.content {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-    font-weight: bold;
-    color: #020353; 
+/*beech ko text */
+.headline-container {
+    max-width: 1000px; 
+    width: 90vw;      
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
-    white-space: nowrap;
+    padding: 0 20px;
+    z-index: 2; 
+    color: white;
 }
 
-/* Bottom section stays at the bottom */
-.bottom-section {
-    background-color: #1a3c6e62;
-    padding: 50px;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+.headline-container h1 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 3rem; 
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.1;
 }
 
-.bottom-section button {
-    background-color: white;
-    color: #1a3c6e;
-    border: none;
-    padding: 40px 55px;
-    border-radius: 10px;
-    font-size: 40px;
-    cursor: pointer;
-    transition: 0.3s;
-    font-family: Arial;
-}
-
-.bottom-section button:hover {
-    background-color: #e0e0e0;
+.headline-container h2 {
+   font-family: 'Quicksand', sans-serif;
+    font-size: 1rem;  
+    font-weight: 200;
+    line-height: 1.4;
+    max-width: 600px;
+    margin: 0 auto;
 }

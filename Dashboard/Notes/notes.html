@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Raleway:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Roboto', sans-serif;
+        background: linear-gradient(to bottom right, #d7ecff, #b5d9ff, #ffffff);
+        color: #1a3d6d;
+        display: flex;
+        height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 320px;
+        background: rgba(224, 239, 255, 0.95);
+        padding: 20px;
+        box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        border-right: 2px solid rgba(170, 203, 232, 0.5);
+    }
+    .sidebar h2 {
+        font-family: 'Raleway', sans-serif;
+        margin-top: 0;
+        font-size: 22px;
+        font-weight: bold;
+        border-bottom: 2px solid #aacbe8;
+        padding-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Folder styling */
+    .folder {
+        margin-bottom: 15px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    .folder-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 8px 12px;
+        background-color: #f0f8ff;
+        cursor: pointer;
+    }
+    .folder-header h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+        padding: 10px;
+        background-color: white;
+        display: none; /* Collapsed by default */
+    }
+    .gallery img {
+        width: 100%;
+        border-radius: 6px;
+        object-fit: cover;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Main Content */
+    .main {
+        flex: 1;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Card styling */
+    .card {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .card h2 {
+        font-family: 'Raleway', sans-serif;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    /* Upload Section */
+    .upload-section select, 
+    .upload-section input {
+        margin-top: 8px;
+        display: block;
+        padding: 6px;
+        border-radius: 6px;
+        border: 1px solid #aacbe8;
+        font-size: 14px;
+        width: 100%;
+    }
+
+    /* Notes Section */
+    textarea {
+        height: 80px;
+        resize: none;
+        padding: 10px;
+        border: 1px solid #aacbe8;
+        border-radius: 6px;
+        font-size: 14px;
+        outline: none;
+        margin-bottom: 10px;
+        background-color: #f9fcff;
+    }
+    button {
+        background-color: #1a73e8;
+        color: white;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    button:hover {
+        background-color: #155bb5;
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-folder-open"></i> Saved Images</h2>
+    <div id="foldersContainer"></div>
+</div>
+
+<div class="main">
+    <div class="card upload-section">
+        <h2><i class="fas fa-upload"></i> Upload an Image</h2>
+        <select id="folderSelect">
+            <option value="Maths">Maths</option>
+            <option value="Physics">Physics</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Nepali">Nepali</option>
+            <option value="English">English</option>
+            <option value="Computer">Computer</option>
+        </select>
+        <input type="file" id="imageInput" accept="image/*">
+    </div>
+
+    <div class="card notes-section">
+        <h2><i class="fas fa-sticky-note"></i> My Notes</h2>
+        <textarea id="notesArea" placeholder="Write your notes here..."></textarea>
+        <button id="saveNotes"><i class="fas fa-save"></i> Save Notes</button>
+    </div>
+</div>
+
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const folderSelect = document.getElementById('folderSelect');
+    const foldersContainer = document.getElementById('foldersContainer');
+    const notesArea = document.getElementById('notesArea');
+    const saveNotesBtn = document.getElementById('saveNotes');
+
+    // Load images organized by folders
+    let folderImages = JSON.parse(localStorage.getItem('folderImages')) || {
+        Maths: [], Physics: [], Chemistry: [], Nepali: [], English: [], Computer: []
+    };
+    renderFolders();
+
+    // Load saved notes
+    notesArea.value = localStorage.getItem('notes') || '';
+
+    // Handle image upload
+    imageInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const imageURL = e.target.result;
+            const folder = folderSelect.value;
+            folderImages[folder].push(imageURL);
+            localStorage.setItem('folderImages', JSON.stringify(folderImages));
+            renderFolders();
+        };
+        reader.readAsDataURL(file);
+    });
+
+    function renderFolders() {
+        foldersContainer.innerHTML = '';
+        for (let folder in folderImages) {
+            if (folderImages[folder].length > 0) {
+                const folderDiv = document.createElement('div');
+                folderDiv.classList.add('folder');
+
+                const folderHeader = document.createElement('div');
+                folderHeader.classList.add('folder-header');
+                folderHeader.innerHTML = `<h3><i class="fas fa-folder"></i> ${folder}</h3><i class="fas fa-chevron-down"></i>`;
+                
+                const galleryDiv = document.createElement('div');
+                galleryDiv.classList.add('gallery');
+                folderImages[folder].forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    galleryDiv.appendChild(img);
+                });
+
+                folderHeader.addEventListener('click', () => {
+                    galleryDiv.style.display = galleryDiv.style.display === 'none' ? 'grid' : 'none';
+                });
+
+                folderDiv.appendChild(folderHeader);
+                folderDiv.appendChild(galleryDiv);
+                foldersContainer.appendChild(folderDiv);
+            }
+        }
+    }
+
+    // Save notes
+    saveNotesBtn.addEventListener('click', () => {
+        localStorage.setItem('notes', notesArea.value);
+        alert('Notes saved!');
+    });
+</script>
+
+</body>
+</html>
