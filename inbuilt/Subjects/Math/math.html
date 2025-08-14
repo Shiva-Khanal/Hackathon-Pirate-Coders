@@ -1,21 +1,446 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Math Test</title>
-  <link rel="stylesheet" href="math.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Math Test — Professional</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1: #eef2f7;
+      --bg-2: #c7d3e9;
+      --accent: #2b6cff;
+      --accent-2: #00bcd4;
+      --card: rgba(255,255,255,0.95);
+      --muted: #6b7280;
+      --glass: rgba(255,255,255,0.65);
+      --success: #10b981;
+      --danger: #ef4444;
+      --radius: 14px;
+      --shadow-lg: 0 12px 30px rgba(11,15,30,0.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+  margin: 0;
+  min-height: 100vh;
+  font-family: Inter, 'Lexend', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background: linear-gradient(135deg,var(--bg-1) 0%, var(--bg-1) 30%, var(--bg-2) 30%, var(--bg-2) 60%, #90a1d5 60%, #5d6bb3 100%);
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Keep overall padding, but ensure top-safe spacing */
+  padding: 36px;
+  padding-top: max(36px, env(safe-area-inset-top));
+
+  /* CRITICAL change: start layout from the top, not vertically centered */
+  display: flex;
+  align-items: flex-start; /* ← makes the .app sit below the top padding */
+  justify-content: center;
+}
+
+   .app {
+  width: 100%;
+  max-width: 1100px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,252,0.95));
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  padding: 24px;
+
+ 
+  margin-top: 20px; 
+}
+
+
+    /* Responsive */
+    @media (max-width:880px){
+      .app{grid-template-columns:1fr; padding:18px}
+    }
+
+    /* Sidebar */
+    .sidebar{
+      padding:20px;
+      border-radius:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,249,252,0.9));
+      backdrop-filter: blur(6px);
+      box-shadow: 0 6px 18px rgba(12,20,40,0.06);
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px;box-shadow:0 6px 18px rgba(11,15,30,0.12)
+    }
+    .brand h2{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .profile-card{display:flex;gap:12px;align-items:center;padding:12px;border-radius:12px;background:linear-gradient(90deg,rgba(43,108,255,0.06), rgba(0,188,212,0.03));}
+    .avatar{width:64px;height:64px;border-radius:10px;background-image:linear-gradient(45deg,#fff2, #fff0);display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);font-size:20px}
+    .profile-info{flex:1}
+    .profile-info h3{margin:0;font-size:16px}
+    .profile-info p{margin:0;color:var(--muted);font-size:13px}
+
+    .points-badge{margin-top:8px;display:flex;align-items:center;gap:10px}
+    .points{background:linear-gradient(90deg,var(--accent), var(--accent-2));color:#fff;padding:8px 12px;border-radius:999px;font-weight:700;box-shadow:0 6px 18px rgba(43,108,255,0.18)}
+    .progress-wrap{margin-top:12px}
+    .progress{background:#e6eefc;border-radius:999px;height:12px;overflow:hidden}
+    .progress-inner{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width 700ms cubic-bezier(.2,.9,.2,1)}
+    .meta{display:flex;gap:10px;align-items:center;justify-content:space-between;margin-top:10px}
+    .meta small{color:var(--muted)}
+
+    /* Main */
+    .main{
+      padding:6px 6px 20px 6px;display:flex;flex-direction:column;gap:18px;
+    }
+    .card{
+      background:var(--card);padding:18px;border-radius:12px;box-shadow:0 8px 20px rgba(13,18,30,0.03);
+    }
+
+    .test-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .test-head h1{font-size:20px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+
+    /* Questions */
+    #questions{display:flex;flex-direction:column;gap:12px}
+    .question{
+      padding:14px;border-radius:10px;border:1px solid rgba(12,18,30,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+    }
+    .question p{margin:0 0 8px 0;font-weight:600}
+
+    .options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .option-label{
+      display:block;padding:10px;border-radius:10px;background:#fbfdff;border:1px solid rgba(12,18,30,0.04);cursor:pointer;transition:transform .12s,box-shadow .12s,background .12s;user-select:none;font-size:14px
+    }
+    .option-label:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(12,18,30,0.06)}
+    .option-input{display:none}
+    .option-input:checked + .option-label{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#fff;border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 30px rgba(43,108,255,0.14)}
+
+    .actions{display:flex;gap:10px;align-items:center}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(43,108,255,0.12);transition:transform .12s}
+    .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(12,18,30,0.06)}
+    .btn:active{transform:translateY(1px)}
+
+    /* result */
+    /* --- Enhanced result UI --- */
+#result {
+  padding: 18px;
+  border-radius: 12px;
+  background-color: linear-gradient(90deg, rgba(16,185,129,0.06), rgba(43,108,255,0.03));
+  border: 1px solid rgba(16,185,129,0.10);
+  box-shadow: 0 8px 24px rgba(13,18,30,0.04);
+  position: relative;
+  overflow: hidden;
+  transition: transform .28s ease, opacity .28s ease;
+}
+
+/* top bar with score and icon */
+.result-top {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* big score badge */
+.score-badge {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.score-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:800;
+  background: linear-gradient(90deg, rgba(43,108,255,0.12), rgba(0,188,212,0.08));
+  box-shadow: 0 8px 20px rgba(43,108,255,0.08);
+  color: #123;
+}
+.score-meta { text-align: left; }
+.score-meta small { display:block; color:var(--muted); font-size:13px }
+.score-meta .percent { font-size:20px; font-weight:800 }
+
+/* progress bar under score */
+.result-progress {
+  margin-top: 12px;
+  height: 10px;
+  background: rgba(12,18,30,0.04);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.result-progress-inner {
+  height:100%;
+  width:0;
+  transition: width .8s cubic-bezier(.2,.9,.2,1);
+  background: linear-gradient(90deg,var(--accent),var(--accent-2));
+}
+
+/* review list */
+.review-list {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  max-height: 260px;
+  overflow:auto;
+  gap: 10px;
+}
+.review-item {
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:10px;
+  border-radius:10px;
+  background: rgba(255,255,255,0.6);
+  border: 1px solid rgba(12,18,30,0.03);
+}
+.review-item .q { flex:1; font-weight:600; font-size:14px; color: #07102a }
+.review-item .meta { font-size:13px; color:var(--muted) }
+
+/* correct / wrong badges */
+.badge {
+  padding:6px 8px;
+  border-radius:999px;
+  font-weight:700;
+  font-size:12px;
+  display:inline-block;
+}
+.badge.correct { background: rgba(16,185,129,0.12); color:var(--success); border:1px solid rgba(16,185,129,0.12) }
+.badge.wrong { background: rgba(239,68,68,0.06); color:var(--danger); border:1px solid rgba(239,68,68,0.06) }
+
+/* actions */
+.result-actions {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:14px;
+  flex-wrap:wrap;
+}
+.result-actions .btn { padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700; }
+.result-actions .btn.ghost { background: #fff; color:var(--accent); border:1px solid rgba(12,18,30,0.06) }
+.result-actions .btn.primary { background:var(--accent); color:#fff; box-shadow:0 8px 24px rgba(43,108,255,0.12) }
+
+/* subtle entrance */
+#result.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+#result.hidden {
+  transform: translateY(-8px);
+  opacity: 0;
+}
+</style>
 </head>
 <body>
+  <main class="app" role="main">
+    <aside class="sidebar" aria-label="profile and progress">
+      <div class="brand">
+        <div class="logo">SQ</div>
+        <div>
+          <h2>Study Quest</h2>
+          <p class="small">Practice. Learn. Improve.</p>
+        </div>
+      </div>
 
-  <div class="container">
-    <h1>Math Test</h1>
-    <div id="questions"></div>
-    <button id="submit">Submit Test</button>
-    <button id="back" class="hidden">Back to Dashboard</button>
-    <div id="result" class="hidden"></div>
-  </div>
+      <div class="profile-card">
+        <div class="avatar" aria-hidden="true">E</div>
+        <div class="profile-info">
+          <h3 id="user-name">Emily</h3>
+          <p>Student</p>
+          <div class="points-badge">
+            <div id="points" class="points" aria-live="polite">0</div>
+            <div class="small">Total points</div>
+          </div>
+          <div class="progress-wrap">
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+              <div id="progress-inner" class="progress-inner"></div>
+            </div>
+            <div class="meta"><small>Overall Progress</small><small id="progress-label">0%</small></div>
+          </div>
+        </div>
+      </div>
 
-  <script src="math.js"></script>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <small class="muted">Quizzes completed</small>
+          <strong id="quizzes-count">0</strong>
+        </div>
+        <div style="height:10px;margin-top:10px;background:#f1f5f9;border-radius:999px;overflow:hidden">
+          <div id="mini-progress" style="height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .6s"></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:12px">
+        <div class="small">Upcoming</div>
+        <div style="margin-top:8px;font-weight:600">Maths — Algebra Basics</div>
+        <div class="small" style="margin-top:6px">Aug 20, 2025</div>
+      </div>
+
+    </aside>
+
+    <section class="main">
+      <div class="card">
+        <div class="test-head">
+          <h1>Math Test</h1>
+          <div class="controls">
+            <div class="small">Difficulty: <strong id="difficulty-label">Easy</strong></div>
+            <div class="actions">
+              <button id="shuffle-btn" class="btn secondary">Shuffle</button>
+              <button id="submit" class="btn">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="questions" class="card" aria-live="polite"></div>
+
+      <div id="result" class="card hidden" aria-hidden="true"></div>
+
+      <footer>
+        <div class="muted">Built with ❤️ — Study Quest</div>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Questions (kept small for demo, move to external file for production)
+    const easyQuestions = [ 
+      {q:"Simplify: 2 + 3 × 4", opts:["14","20","24","10"], ans:"14"},
+      {q:"Square of 12?", opts:["124","122","144","154"], ans:"144"},
+      {q:"Cube of 3?", opts:["6","9","27","18"], ans:"27"},
+      {q:"Value of 5² + 4²?", opts:["25","41","45","29"], ans:"41"},
+      {q:"√81 = ?", opts:["8","9","7","6"], ans:"9"},
+      {q:"LCM of 4 and 6?", opts:["10","12","8","14"], ans:"12"},
+      {q:"HCF of 18 and 24?", opts:["6","8","12","4"], ans:"6"},
+      {q:"Simplify: 15 ÷ (5 × 3)", opts:["1","3","5","15"], ans:"1"},
+      {q:"Value of 2³?", opts:["6","8","4","9"], ans:"8"},
+      {q:"Perimeter of square with side 5 cm?", opts:["20 cm","25 cm","15 cm","10 cm"], ans:"20 cm"}
+    ];
+
+    const hardQuestions = [
+      {q:"Derivative of sin(x)?", opts:["cos(x)","-cos(x)","sin(x)","-sin(x)"], ans:"cos(x)"},
+      {q:"Integral of x dx?", opts:["x²/2 + C","x + C","ln|x| + C","e^x + C"], ans:"x²/2 + C"},
+      {q:"Solve: 3x - 5 = 10", opts:["3","4","5","6"], ans:"5"},
+      {q:"If f(x) = x², f'(3) = ?", opts:["3","6","9","12"], ans:"6"},
+      {q:"Value of log₁₀(1000)?", opts:["1","2","3","10"], ans:"3"},
+      {q:"Simplify: (x²)³", opts:["x⁵","x⁶","x⁸","x⁹"], ans:"x⁶"},
+      {q:"Area of circle with radius 7?", opts:["154","44","77","100"], ans:"154"},
+      {q:"Limit of sin(x)/x as x → 0?", opts:["0","1","∞","Does not exist"], ans:"1"},
+      {q:"If a² - b² = 0, then a = ?", opts:["b","-b","±b","0"], ans:"±b"},
+      {q:"Sum of first 10 natural numbers?", opts:["45","50","55","60"], ans:"55"}
+    ];
+
+    // DOM nodes
+    const questionsDiv = document.getElementById('questions');
+    const submitBtn = document.getElementById('submit');
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const resultDiv = document.getElementById('result');
+    const pointsEl = document.getElementById('points');
+    const progressInner = document.getElementById('progress-inner');
+    const progressLabel = document.getElementById('progress-label');
+    const quizzesCount = document.getElementById('quizzes-count');
+    const miniProgress = document.getElementById('mini-progress');
+    const difficultyLabel = document.getElementById('difficulty-label');
+
+    // LocalStorage helpers
+    function getPoints(){ return Number(localStorage.getItem('points')) || 0; }
+    function savePoints(v){ localStorage.setItem('points', String(v)); updatePointsDisplay(); }
+    function getMarks(){ const m = localStorage.getItem('marks'); return m ? JSON.parse(m) : []; }
+    function saveMarks(m){ localStorage.setItem('marks', JSON.stringify(m)); }
+
+    // UI updates
+    function updatePointsDisplay(){
+      const p = getPoints();
+      pointsEl.textContent = p;
+      const progress = Math.min(100, Math.round((p / 2000) * 100)); // example scale
+      progressInner.style.width = progress + '%';
+      progressLabel.textContent = progress + '%';
+      quizzesCount.textContent = getMarks().length;
+      miniProgress.style.width = progress + '%';
+    }
+
+    // Data & state
+    let currentQuestions = [];
+
+    function chooseQuestions(){
+      const pts = getPoints();
+      if(pts < 5){ currentQuestions = shuffleArray(easyQuestions).slice(0,6); difficultyLabel.textContent = 'Easy'; }
+      else { currentQuestions = shuffleArray(hardQuestions).slice(0,6); difficultyLabel.textContent = 'Hard'; }
+    }
+
+    function shuffleArray(arr){
+      return arr.map(a=>({v:a,r:Math.random()})).sort((a,b)=>a.r-b.r).map(a=>a.v);
+    }
+
+    function renderQuestions(){
+      questionsDiv.innerHTML = '';
+      currentQuestions.forEach((item,i)=>{
+        const q = document.createElement('div'); q.className='question';
+        q.innerHTML = `\n          <p>${i+1}. ${item.q}</p>\n          <div class='options' role='radiogroup' aria-label='Question ${i+1} options'>\n          ${item.opts.map((opt,idx)=>{
+            const id = `q${i}_opt${idx}`;
+            return `\n            <input class='option-input' type='radio' name='q${i}' id='${id}' value='${escapeHtml(opt)}'>\n            <label class='option-label' for='${id}'>${escapeHtml(opt)}</label>`
+          }).join('')}\n          </div>`;
+        questionsDiv.appendChild(q);
+      });
+    }
+
+    // Simple HTML escape
+    function escapeHtml(s){ return String(s).replace(/[&<>\"]+/g, ch=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[ch]||ch)); }
+
+    function calculateScore(){
+      let score=0; const review=[];
+      currentQuestions.forEach((item,i)=>{
+        const selected = document.querySelector(`input[name=\"q${i}\"]:checked`);
+        const answer = selected ? selected.value : null;
+        if(answer === item.ans){ score++; } else { review.push({q:item.q, your: answer||'None', correct:item.ans}); }
+      });
+      return {score, review};
+    }
+
+    function showResult(){
+      const {score, review} = calculateScore();
+      resultDiv.classList.remove('hidden'); resultDiv.setAttribute('aria-hidden','false');
+      resultDiv.innerHTML = `<h3>Your score: ${score} / ${currentQuestions.length}</h3>`;
+      if(review.length){
+        const ol = document.createElement('ol'); ol.className='review-list';
+        review.forEach(r=>{ const li=document.createElement('li'); li.innerHTML = `<strong>${escapeHtml(r.q)}</strong><br><span class='small'>Your answer: <span style='color:${r.your==='None'? 'var(--muted)': 'var(--danger)'}'>${escapeHtml(r.your)}</span> — Correct: <strong style='color:var(--success)'>${escapeHtml(r.correct)}</strong></span>`; ol.appendChild(li); });
+        resultDiv.appendChild(ol);
+      } else {
+        const p = document.createElement('p'); p.textContent = 'Excellent! All answers correct 🎉'; resultDiv.appendChild(p);
+      }
+
+      // disable inputs
+      document.querySelectorAll('.option-input').forEach(i=>i.disabled = true);
+      submitBtn.disabled = true; submitBtn.textContent = 'Submitted';
+
+      // update points & marks
+      let points = getPoints(); points += score; savePoints(points);
+      const marks = getMarks(); marks.push({date:(new Date()).toLocaleString(), score}); saveMarks(marks);
+    }
+
+    // Event wiring
+    submitBtn.addEventListener('click', ()=>{
+      showResult();
+    });
+
+    shuffleBtn.addEventListener('click', ()=>{ chooseQuestions(); renderQuestions(); resultDiv.classList.add('hidden'); submitBtn.disabled=false; submitBtn.textContent='Submit'; document.querySelectorAll('.option-input').forEach(i=>i.disabled=false); });
+
+    // init
+    function init(){ chooseQuestions(); renderQuestions(); updatePointsDisplay(); }
+
+    init();
+  </script>
 </body>
 </html>

@@ -95,14 +95,14 @@ body {
    <!-- Header -->
     <div class="topbar">
         <div class="topbar-left">
-            <img src="/images/logo.png" alt="Study Quest Logo">
+            <img src="../images/logo.png" alt="Study Quest Logo">
         </div>
         <nav class="nav-links">
             <a href="../inbuilt/inbuilt.html" id="Inbuilt">Inbuilt Test</a>
             <a href="../selftest/selftest.html" id="Selftest">Self Test</a>
             <a href="../notes/notes.html" id="Notes">Notes</a>
             <a href="../review/review.html" id="Review">Review</a>
-            <a href="../selfstudy/study.html" id="Selfstudy">Self Study</a>
+            <a href="../selfstudy/study.html" id="selfstudy">Self Study</a>
         </nav>
         <div class="topbar-right nav-links">
             <a  href="../profile/profile.html" id="profile">Profile</a>
@@ -287,50 +287,9 @@ body {
 
     resizeCanvas();
 
-    const points = localStorage.getItem("points") || 0;
-    document.getElementById("points-display").textContent = `${points}`; 
-    document.getElementById("Inbuilt").addEventListener("click", function(event) {
-    let points = Number(localStorage.getItem("points")) || 0;
-
-    if (points < 5) {
-        event.preventDefault(); // Stop the link from going to feature1.html
-        alert(`You need at least 5 points for this feature. You have ${points}.`);
-    }
-    // If points >= 5, the link works normally and navigates
-});
-document.getElementById("Selftest").addEventListener("click", function(event) {
-    let points = Number(localStorage.getItem("points")) || 0;
-
-    if (points < 15) {
-        event.preventDefault();
-        alert(`You need at least 15 points for this feature. You have ${points}.`);
-    }
-});
-document.getElementById("Notes").addEventListener("click", function(event) {
-    let points = Number(localStorage.getItem("points")) || 0;
-
-    if (points < 10) {
-        event.preventDefault();
-        alert(`You need at least 10 points for this feature. You have ${points}.`);
-    }
-});
-document.getElementById("Review").addEventListener("click", function(event) {
-    let points = Number(localStorage.getItem("points")) || 0;
-
-    if (points < 20) {
-        event.preventDefault();
-        alert(`You need at least 20 points for this feature. You have ${points}.`);
-    }
-});
-document.getElementById("Selfstudy").addEventListener("click", function(event) {
-    let points = Number(localStorage.getItem("points")) || 0;
-
-    if (points < 5) {
-        event.preventDefault();
-        alert(`You need at least 5 points for this feature. You have ${points}.`);
-    }
-});
-      </script>
+const points = parseInt(localStorage.getItem("points")) || 0;
+document.getElementById("points-display").textContent = points;
+        </script>
 
 </body>
 </html>

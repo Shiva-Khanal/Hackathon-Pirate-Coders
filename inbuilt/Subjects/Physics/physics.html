@@ -1,21 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Physics Test</title>
-  <link rel="stylesheet" href="physics.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Study Quest — Physics Quiz</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-1: #eef2f7;
+      --bg-2: #c7d3e9;
+      --accent: #2b6cff;
+      --accent-2: #00bcd4;
+      --card: rgba(255,255,255,0.95);
+      --muted: #6b7280;
+      --radius: 14px;
+      --shadow-lg: 0 12px 30px rgba(11,15,30,0.12);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+
+    /* REPLACED body rule so layout starts below safe area / top padding */
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Inter, 'Lexend', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background: linear-gradient(135deg,var(--bg-1) 0%, var(--bg-1) 30%, var(--bg-2) 30%, var(--bg-2) 60%, #90a1d5 60%, #5d6bb3 100%);
+      color:#0f172a;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+
+      /* Keep overall padding, and ensure top-safe spacing for notches */
+      padding: 36px;
+      padding-top: max(36px, env(safe-area-inset-top));
+
+      /* CRITICAL: don't vertically center — start from top so nothing gets blocked */
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    .app{
+      width:100%;
+      max-width:1000px;
+      border-radius:18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,252,0.95));
+      box-shadow: var(--shadow-lg);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:20px;
+      padding:20px;
+      margin-top: 0; /* content already pushed by body padding-top */
+    }
+
+    @media (max-width:880px){
+      .app{grid-template-columns:1fr; padding:16px}
+    }
+
+    .sidebar{padding:16px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.92), rgba(247,249,252,0.9));backdrop-filter: blur(6px);box-shadow: 0 6px 18px rgba(12,20,40,0.06);display:flex;flex-direction:column;gap:12px}
+    .logo{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:18px}
+    .brand h2{margin:0;font-size:16px}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+
+    .main{padding:8px 8px 20px 8px;display:flex;flex-direction:column}
+
+    /* ensure uniform spacing between dynamic blocks inside .main */
+    .main > * + * { margin-top: 18px; }
+
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 8px 20px rgba(13,18,30,0.03)}
+
+    .test-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .test-head h1{font-size:20px;margin:0}
+    .controls{display:flex;gap:10px;align-items:center}
+
+    #questions{display:flex;flex-direction:column;gap:12px}
+    .question{padding:12px;border-radius:10px;border:1px solid rgba(12,18,30,0.04);background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));}
+    .question p{margin:0 0 8px 0;font-weight:600}
+    .options{display:flex;flex-direction:column;gap:8px}
+    .options label{display:flex;align-items:center;gap:10px;padding:8px;border-radius:8px;background:#fbfdff;border:1px solid rgba(12,18,30,0.04);cursor:pointer;user-select:none}
+    .options input[type="radio"]{accent-color: var(--accent)}
+
+    .actions{display:flex;gap:10px;align-items:center}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer;box-shadow:0 10px 24px rgba(43,108,255,0.12);transition:transform .12s}
+    .btn.secondary{background:#fff;color:var(--accent);border:1px solid rgba(12,18,30,0.06)}
+
+    #result.hidden{display:none}
+    #result p{margin:0}
+
+    footer{display:flex;justify-content:flex-end;padding-top:6px}
+
+    .muted{color:var(--muted);font-size:13px}
+
+    /* small responsive tweaks */
+    @media (max-width:520px){
+      .options label{font-size:14px}
+      .logo{width:48px;height:48px}
+    }
+  </style>
 </head>
 <body>
+  <main class="app" role="main">
+    <aside class="sidebar" aria-label="profile and progress">
+      <div class="brand" style="display:flex;align-items:center;gap:12px">
+        <div class="logo">SQ</div>
+        <div>
+          <h2>Study Quest</h2>
+          <p class="small">Practice. Learn. Improve.</p>
+        </div>
+      </div>
 
-  <div class="container">
-    <h1>Physics Test</h1>
-    <div id="questions"></div>
-    <button id="submit">Submit Test</button>
-    <button id="back" class="hidden">Back to Dashboard</button>
-    <div id="result" class="hidden"></div>
-  </div>
+      <div class="card" style="padding:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <small class="muted">Quizzes completed</small>
+          <strong id="quizzes-count">0</strong>
+        </div>
+        <div style="height:10px;margin-top:10px;background:#f1f5f9;border-radius:999px;overflow:hidden">
+          <div id="mini-progress" style="height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .6s"></div>
+        </div>
+      </div>
 
-  <script src="physics.js"></script>
+      <div class="card" style="padding:12px">
+        <div class="small">Upcoming</div>
+        <div style="margin-top:8px;font-weight:600">Physics — Mechanics</div>
+        <div class="small" style="margin-top:6px">Aug 20, 2025</div>
+      </div>
+
+    </aside>
+
+    <section class="main">
+      <div class="card">
+        <div class="test-head">
+          <h1>Physics Quiz</h1>
+          <div class="controls">
+            <div class="small">Difficulty: <strong id="difficulty-label">Auto</strong></div>
+            <div class="actions">
+              <button id="shuffle-btn" class="btn secondary">Shuffle</button>
+              <button id="submit" class="btn">Submit</button>
+              <button id="back" class="btn secondary" style="margin-left:6px">Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="questions" class="card" aria-live="polite"></div>
+
+      <div id="result" class="card hidden" aria-hidden="true"></div>
+
+      <footer>
+        <div class="muted">Built with ❤️ — Study Quest</div>
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // QUESTIONS (physics) — easy & hard sets provided by user
+    const easyQuestions = [ 
+      {q:"What is the SI unit of force?", opts:["Newton","Joule","Watt","Pascal"], ans:"Newton"},
+      {q:"Acceleration due to gravity on Earth is approximately?", opts:["8.9 m/s²","9.8 m/s²","10.8 m/s²","9.0 m/s²"], ans:"9.8 m/s²"},
+      {q:"1 kilometre = ?", opts:["100 m","1000 m","10000 m","1 m"], ans:"1000 m"},
+      {q:"Which physical quantity is measured in Joules?", opts:["Force","Energy","Power","Pressure"], ans:"Energy"},
+      {q:"Speed = ?", opts:["Distance × Time","Distance / Time","Time / Distance","Acceleration × Time"], ans:"Distance / Time"},
+      {q:"Which of these is a scalar quantity?", opts:["Velocity","Force","Speed","Acceleration"], ans:"Speed"},
+      {q:"The device used to measure electric current is?", opts:["Voltmeter","Ammeter","Ohmmeter","Thermometer"], ans:"Ammeter"},
+      {q:"Light travels fastest in which medium?", opts:["Glass","Water","Air","Vacuum"], ans:"Vacuum"},
+      {q:"Which of the following is NOT a unit of pressure?", opts:["Pascal","Bar","Newton","Torr"], ans:"Newton"},
+      {q:"Who proposed the laws of motion?", opts:["Einstein","Newton","Galileo","Faraday"], ans:"Newton"}
+    ];
+
+    const hardQuestions = [
+      {q:"In SHM, displacement is given by x = 0.05cos(10πt). The amplitude is?", opts:["0.05 m","0.1 m","5 m","10 m"], ans:"0.05 m"},
+      {q:"The escape velocity from Earth is approximately?", opts:["7 km/s","11.2 km/s","9.8 km/s","15 km/s"], ans:"11.2 km/s"},
+      {q:"Two resistors of 4Ω and 6Ω are in series. The total resistance is?", opts:["2Ω","10Ω","24Ω","1.5Ω"], ans:"10Ω"},
+      {q:"Work done on an object is equal to?", opts:["Change in momentum","Change in kinetic energy","Change in acceleration","Change in displacement"], ans:"Change in kinetic energy"},
+      {q:"In a transformer, the voltage is doubled. The current in the secondary coil will?", opts:["Double","Halve","Remain same","Be zero"], ans:"Halve"},
+      {q:"The half-life of a radioactive substance is 10 days. After 30 days, fraction remaining is?", opts:["1/2","1/4","1/8","1/16"], ans:"1/8"},
+      {q:"In Young’s double slit experiment, the fringe width is proportional to?", opts:["Slit separation","Wavelength","Screen distance","Both wavelength and screen distance"], ans:"Both wavelength and screen distance"},
+      {q:"If momentum is constant, which quantity must remain constant?", opts:["Mass","Velocity","Kinetic energy","Acceleration"], ans:"Velocity"},
+      {q:"The magnetic flux through a coil changes from 5 Wb to 0 Wb in 0.1 s. Induced EMF is?", opts:["5 V","50 V","0.5 V","500 V"], ans:"50 V"},
+      {q:"A projectile has maximum range when the angle of projection is?", opts:["30°","45°","60°","90°"], ans:"45°"}
+    ];
+
+    const questionsDiv = document.getElementById("questions");
+    const submitBtn = document.getElementById("submit");
+    const backBtn = document.getElementById("back");
+    const resultDiv = document.getElementById("result");
+    const shuffleBtn = document.getElementById('shuffle-btn');
+    const difficultyLabel = document.getElementById('difficulty-label');
+    const quizzesCount = document.getElementById('quizzes-count');
+    const miniProgress = document.getElementById('mini-progress');
+
+    function getPoints() { return Number(localStorage.getItem("points")) || 0; }
+    function savePoints(p) { localStorage.setItem("points", p); updateUI(); }
+    function getMarks() { const marks = localStorage.getItem("marks"); return marks ? JSON.parse(marks) : []; }
+    function saveMarks(marks) { localStorage.setItem("marks", JSON.stringify(marks)); updateUI(); }
+
+    function updateUI(){
+      const p = getPoints();
+      const progress = Math.min(100, Math.round((p / 2000) * 100));
+      quizzesCount.textContent = getMarks().length;
+      miniProgress.style.width = progress + '%';
+    }
+
+    let currentQuestions = [];
+
+    function loadQuestions() {
+      if(getPoints() < 5) { currentQuestions = shuffleArray(easyQuestions).slice(0,6); difficultyLabel.textContent = 'Easy'; }
+      else { currentQuestions = shuffleArray(hardQuestions).slice(0,6); difficultyLabel.textContent = 'Hard'; }
+    }
+
+    function shuffleArray(arr){ return arr.map(a=>({v:a,r:Math.random()})).sort((a,b)=>a.r-b.r).map(a=>a.v); }
+
+    function displayQuestions(){
+      questionsDiv.innerHTML = '';
+      currentQuestions.forEach((item,i)=>{
+        const q = document.createElement('div'); q.className='question';
+        const optsHtml = item.opts.map((opt,idx)=>{
+          const id = `q${i}_opt${idx}`;
+          return `<label for="${id}"><input id="${id}" type="radio" name="q${i}" value="${escapeHtml(opt)}"> ${escapeHtml(opt)}</label>`;
+        }).join('');
+        q.innerHTML = `<p>${i+1}. ${escapeHtml(item.q)}</p><div class="options">${optsHtml}</div>`;
+        questionsDiv.appendChild(q);
+      });
+    }
+
+    function escapeHtml(s){ return String(s).replace(/[&<>"]+/g, ch=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[ch]||ch)); }
+
+    function calculateScore(){
+      let score=0; let review = [];
+      currentQuestions.forEach((item,i)=>{
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        const answer = selected ? selected.value : null;
+        if(answer === item.ans){ score++; } else { review.push({q:item.q, your: answer||'None', correct:item.ans}); }
+      });
+      return {score, review};
+    }
+
+    function showResult(){
+      const {score, review} = calculateScore();
+      resultDiv.classList.remove('hidden'); resultDiv.setAttribute('aria-hidden','false');
+
+      let html = `<h3>Your score: ${score} / ${currentQuestions.length}</h3>`;
+      if(review.length){
+        html += '<ol class="review-list" style="margin-top:10px;color:var(--muted)\">';
+        review.forEach(r=>{ html += `<li style="margin-bottom:8px"><strong>${escapeHtml(r.q)}</strong><br><span class="small">Your answer: <span style='color:${r.your==='None'? 'var(--muted)': 'var(--danger)'}'>${escapeHtml(r.your)}</span> — Correct: <strong style='color:var(--success)'>${escapeHtml(r.correct)}</strong></span></li>` });
+        html += '</ol>';
+      } else {
+        html += '<p>Excellent! All answers correct 🎉</p>';
+      }
+
+      resultDiv.innerHTML = html;
+
+      // disable inputs and submit
+      document.querySelectorAll('input[type="radio"]').forEach(i=>i.disabled=true);
+      submitBtn.disabled = true; submitBtn.textContent = 'Submitted';
+
+      // update points & marks
+      let points = getPoints(); points += score; savePoints(points);
+      const marks = getMarks(); marks.push({date:(new Date()).toLocaleString(), score}); saveMarks(marks);
+
+      // ensure result is visible and not blocked
+      resultDiv.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    // events
+    submitBtn.addEventListener('click', showResult);
+    shuffleBtn.addEventListener('click', ()=>{ loadQuestions(); displayQuestions(); resultDiv.classList.add('hidden'); submitBtn.disabled=false; submitBtn.textContent='Submit'; document.querySelectorAll('input[type="radio"]').forEach(i=>i.disabled=false); });
+    backBtn.addEventListener('click', ()=>{ window.location.href = '../../../dashboard/dashboard.html'; });
+
+    // init
+    function init(){ loadQuestions(); displayQuestions(); updateUI(); }
+    init();
+  </script>
 </body>
 </html>
