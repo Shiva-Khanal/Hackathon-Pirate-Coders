@@ -6,27 +6,34 @@
     <title>Study Quest</title>
     <link rel="stylesheet" href="dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="dashboard.js" defer></script>
 </head>
 <body>
 
-    <!-- Header -->
-    <div class="topbar">
-        <div class="topbar-left">
-            <img src="logo.png" alt="Study Quest Logo">
-        </div>
-        <nav class="nav-links">
-            <a href="#">About</a>
-            <a href="Inbuilt Test/inbuilt.html">Inbuilt Test</a>
-            <a href="Self Test/selftest.html">Self Test</a>
-            <a href="Notes/notes.html">Notes</a>
-            <a href="Review/review.html">Review</a>
-            <a href="selfstudy/study.html">Self Study</a>
-            <a href="#">Help</a>
-        </nav>
-        <div class="topbar-right">
-            <span class="profile">Profile</span>
-        </div>
+  <!-- TOPBAR -->
+  <header class="topbar" role="banner">
+    <div class="logo" aria-hidden="false">
+      <img src="../images/logo.png" alt="Study Quest logo" onerror="this.style.display='none'">
+      <div>
+        <div style="font-weight:700; font-family:Quicksand; color:var(--text)">Study Quest</div>
+        <div style="font-size:12px; color:var(--muted)">Learn. Review. Level up.</div>
+      </div>
     </div>
+
+    <nav class="nav" role="navigation" aria-label="main">
+      <a href="../dashboard/dashboard.html">Home</a>
+      <a href="../inbuilt/inbuilt.html" id="Inbuilt">Inbuilt</a>
+      <a href="../selftest/selftest.html" id="Selftest">Self Test</a>
+      <a href="../notes/notes.html"  id="Notes">Notes</a>
+      <a href="../review/review.html"  id="Review">Review</a>
+      <a href="../selfstudy/study.html" id="selfstudy">Self Study</a>
+      <!-- <a href="../contact/contact.html">Contact</a> -->
+    </nav>
+
+    <div>
+      <a  href="../profile/profile.html" class="primary-btn" aria-label="profile" id="quickNewBtn"  >Profile</a>
+    </div>
+  </header>
 
     <!-- Two-column main content -->
     <div class="main-content">
@@ -34,10 +41,10 @@
             <h1><b>STUDY QUEST</b></h1>
             <h2>Where Learning is an Adventure</h2>
             <p>What if learning felt like unlocking the next level of your favorite game instead of memorizing for the next exam?</p>
-            <a href="Inbuilt Test/inbuilt.html" class="get-started-btn">Get Started</a>
+            <a href="../inbuilt/inbuilt.html" class="get-started-btn">Get Started</a>
         </div>
         <div class="main-image">
-            <img src="background.png" alt="Learning Adventure">
+            <img src="../images/background.png" alt="Learning Adventure">
         </div>
     </div>
     
@@ -63,6 +70,22 @@
             <p>Address: Kathmandu, Nepal</p>
         </div>
     </footer>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+  const currentPath = window.location.pathname;
+  const navLinks = document.querySelectorAll('.nav a');
+
+  navLinks.forEach(link => {
+    const linkPath = new URL(link.href).pathname;
+
+    // Highlight if the current path ends with the same filename as the link
+    if (currentPath.endsWith(linkPath.split('/').pop())) {
+      link.classList.add('active');
+    }
+  });
+});
+
+</script>
 
 </body>
 </html>

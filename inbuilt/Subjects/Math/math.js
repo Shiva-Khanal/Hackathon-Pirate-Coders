@@ -1,29 +1,28 @@
 const easyQuestions = [ 
-  {q:"What is the SI unit of force?", opts:["Newton","Joule","Watt","Pascal"], ans:"Newton"},
-  {q:"Acceleration due to gravity on Earth is approximately?", opts:["8.9 m/s²","9.8 m/s²","10.8 m/s²","9.0 m/s²"], ans:"9.8 m/s²"},
-  {q:"1 kilometre = ?", opts:["100 m","1000 m","10000 m","1 m"], ans:"1000 m"},
-  {q:"Which physical quantity is measured in Joules?", opts:["Force","Energy","Power","Pressure"], ans:"Energy"},
-  {q:"Speed = ?", opts:["Distance × Time","Distance / Time","Time / Distance","Acceleration × Time"], ans:"Distance / Time"},
-  {q:"Which of these is a scalar quantity?", opts:["Velocity","Force","Speed","Acceleration"], ans:"Speed"},
-  {q:"The device used to measure electric current is?", opts:["Voltmeter","Ammeter","Ohmmeter","Thermometer"], ans:"Ammeter"},
-  {q:"Light travels fastest in which medium?", opts:["Glass","Water","Air","Vacuum"], ans:"Vacuum"},
-  {q:"Which of the following is NOT a unit of pressure?", opts:["Pascal","Bar","Newton","Torr"], ans:"Newton"},
-  {q:"Who proposed the laws of motion?", opts:["Einstein","Newton","Galileo","Faraday"], ans:"Newton"}
+  {q:"Simplify: 2 + 3 × 4", opts:["14","20","24","10"], ans:"14"},
+  {q:"Square of 12?", opts:["124","122","144","154"], ans:"144"},
+  {q:"Cube of 3?", opts:["6","9","27","18"], ans:"27"},
+  {q:"Value of 5² + 4²?", opts:["25","41","45","29"], ans:"41"},
+  {q:"√81 = ?", opts:["8","9","7","6"], ans:"9"},
+  {q:"LCM of 4 and 6?", opts:["10","12","8","14"], ans:"12"},
+  {q:"HCF of 18 and 24?", opts:["6","8","12","4"], ans:"6"},
+  {q:"Simplify: 15 ÷ (5 × 3)", opts:["1","3","5","15"], ans:"1"},
+  {q:"Value of 2³?", opts:["6","8","4","9"], ans:"8"},
+  {q:"Perimeter of square with side 5 cm?", opts:["20 cm","25 cm","15 cm","10 cm"], ans:"20 cm"}
 ];
 
 const hardQuestions = [
-  {q:"In SHM, displacement is given by x = 0.05cos(10πt). The amplitude is?", opts:["0.05 m","0.1 m","5 m","10 m"], ans:"0.05 m"},
-  {q:"The escape velocity from Earth is approximately?", opts:["7 km/s","11.2 km/s","9.8 km/s","15 km/s"], ans:"11.2 km/s"},
-  {q:"Two resistors of 4Ω and 6Ω are in series. The total resistance is?", opts:["2Ω","10Ω","24Ω","1.5Ω"], ans:"10Ω"},
-  {q:"Work done on an object is equal to?", opts:["Change in momentum","Change in kinetic energy","Change in acceleration","Change in displacement"], ans:"Change in kinetic energy"},
-  {q:"In a transformer, the voltage is doubled. The current in the secondary coil will?", opts:["Double","Halve","Remain same","Be zero"], ans:"Halve"},
-  {q:"The half-life of a radioactive substance is 10 days. After 30 days, fraction remaining is?", opts:["1/2","1/4","1/8","1/16"], ans:"1/8"},
-  {q:"In Young’s double slit experiment, the fringe width is proportional to?", opts:["Slit separation","Wavelength","Screen distance","Both wavelength and screen distance"], ans:"Both wavelength and screen distance"},
-  {q:"If momentum is constant, which quantity must remain constant?", opts:["Mass","Velocity","Kinetic energy","Acceleration"], ans:"Velocity"},
-  {q:"The magnetic flux through a coil changes from 5 Wb to 0 Wb in 0.1 s. Induced EMF is?", opts:["5 V","50 V","0.5 V","500 V"], ans:"50 V"},
-  {q:"A projectile has maximum range when the angle of projection is?", opts:["30°","45°","60°","90°"], ans:"45°"}
+  {q:"Derivative of sin(x)?", opts:["cos(x)","-cos(x)","sin(x)","-sin(x)"], ans:"cos(x)"},
+  {q:"Integral of x dx?", opts:["x²/2 + C","x + C","ln|x| + C","e^x + C"], ans:"x²/2 + C"},
+  {q:"Solve: 3x - 5 = 10", opts:["3","4","5","6"], ans:"5"},
+  {q:"If f(x) = x², f'(3) = ?", opts:["3","6","9","12"], ans:"6"},
+  {q:"Value of log₁₀(1000)?", opts:["1","2","3","10"], ans:"3"},
+  {q:"Simplify: (x²)³", opts:["x⁵","x⁶","x⁸","x⁹"], ans:"x⁶"},
+  {q:"Area of circle with radius 7?", opts:["154","44","77","100"], ans:"154"},
+  {q:"Limit of sin(x)/x as x → 0?", opts:["0","1","∞","Does not exist"], ans:"1"},
+  {q:"If a² - b² = 0, then a = ?", opts:["b","-b","±b","0"], ans:"±b"},
+  {q:"Sum of first 10 natural numbers?", opts:["45","50","55","60"], ans:"55"}
 ];
-
 
 const questionsDiv = document.getElementById("questions");
 const submitBtn = document.getElementById("submit");
@@ -130,7 +129,7 @@ submitBtn.addEventListener("click", () => {
 });
 
 backBtn.addEventListener("click", () => {
-  window.location.href = "dashboard.html";  // back to homepage(profile)
+  window.location.href = "../../../dashboard/dashboard.html";  // back to homepage(profile)
 });
 
 loadQuestions();
